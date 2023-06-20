@@ -41,3 +41,4 @@ backend/dist
 backend/build
 backend/logs
 backend/.DS_Store
+backend/keys.json

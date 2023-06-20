@@ -1,13 +1,17 @@
-const { google, sheets_v4 } = require("googleapis");
-const keys = require("./keys.json"); // OAuth 2.0 클라이언트 ID 파일")
+import {google} from "googleapis";
+import connection from "./database";
+const keys = require("./keys.json");
 
-const client = new google.auth.JWT(keys.client_email, null, keys.private_key, [
-  "https://www.googleapis.com/auth/spreadsheets",
-]);
+const client = new google.auth.JWT(
+  keys.client_email,
+  undefined,
+  keys.private_key,
+  ["https://www.googleapis.com/auth/spreadsheets"]
+);
 
-client.authorize(function (err: Error, tokens: any) {
+client.authorize((err: Error | null, tokens: any) => {
   if (err) {
-    console.log(err);
+    console.error(err);
     return;
   } else {
     console.log("Connected to Google Sheets API!");
@@ -15,21 +19,38 @@ client.authorize(function (err: Error, tokens: any) {
   }
 });
 
-function getData(client: any) {
+const getData = (client: any) => {
   const sheets = google.sheets({
     version: "v4",
     auth: client,
   });
   const options = {
-    spreadsheetId: "1b3az54K2-P1BEB0IVdQ4Ces9a3NHsrlKqtxzeJuJnU0", // replace with your spreadsheet ID
-    range: "voca_app!A1:B10", // replace with your range: ;
+    spreadsheetId: "1b3az54K2-P1BEB0IVdQ4Ces9a3NHsrlKqtxzeJuJnU0",
+    range: "voca_app!A1:B10",
   };
 
   sheets.spreadsheets.values.get(options, (err: any, res: any) => {
     if (err) {
-      console.log(err);
+      console.error(err);
     } else {
       console.log("Data:", res.data.values);
+      insertDataIntoDatabase(res.data.values);
     }
   });
-}
+};
+
+const insertDataIntoDatabase = (data: any[]) => {
+  const query = "INSERT INTO quiz (question, answer) VALUES ?";
+
+  connection.query(
+    query,
+    [data],
+    (err: any, result: {affectedRows: string}) => {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log("Number of records inserted: " + result.affectedRows);
+      }
+    }
+  );
+};
