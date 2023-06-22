@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
+import useChatGpt from "@/hook/useChatGpt";
 
 export default function Quiz() {
   // get the quiz data from the api
@@ -15,12 +16,14 @@ export default function Quiz() {
   if (quizData[randomNum]) {
     console.log(quizData[randomNum].question);
   }
-
+  const translation = useChatGpt(quizData[randomNum]?.question);
+  console.log(translation);
   return (
     <div>
       <h1>
         {quizData[randomNum] ? quizData[randomNum].question : "Loading..."}
       </h1>
+      <h1>{translation ? translation : "Loading..."}</h1>
     </div>
   );
 }
