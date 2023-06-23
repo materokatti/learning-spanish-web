@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const useChatGpt = (prompt: string) => {
@@ -6,14 +6,26 @@ const useChatGpt = (prompt: string) => {
 
   useEffect(() => {
     if (prompt) {
-      const api_key = "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";
+      const api_key = "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";
 
       axios
         .post(
-          "https://api.openai.com/v1/completions",
+          "https://api.openai.com/v1/chat/completions",
           {
-            prompt: 'Translate the following English text to French: "{text}"',
-            max_tokens: 60,
+            model: "gpt-3.5-turbo",
+            messages: [
+              {
+                role: "user",
+                content: `${prompt}라는 단어가 들어간 스페인어 문제를 내 줘.
+                          단, 다음 조건에 맞게 문제를 내 줘
+                          * ${prompt}가 들어간 스페인어 문장이어야 함.
+                          * 레벨이 A1, A2, B1, B2 순으로 총 4 문장이 나와야 함.
+                          * 문장 하단에는 한국어 해석이 들어가야 함.
+                          * ${prompt}가 들어갈 공간은 빈칸으로 비워서 문제를 푸는 사람이 맞추도록 함. 
+                          `,
+              },
+            ],
+            max_tokens: 100,
           },
           {
             headers: {
@@ -23,7 +35,8 @@ const useChatGpt = (prompt: string) => {
           }
         )
         .then((response) => {
-          console.log(response.data.choices[0].text.trim());
+          console.log(response.data.choices[0].message);
+          setTranslation(response.data.choices[0].message.content);
         })
         .catch((error) => {
           console.log(error);

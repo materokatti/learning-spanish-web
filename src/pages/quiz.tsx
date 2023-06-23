@@ -1,18 +1,19 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import useChatGpt from "@/hook/useChatGpt";
 
 export default function Quiz() {
   // get the quiz data from the api
   const [quizData, setQuizData] = useState([] as any);
+  const [randomNum, setRandomNum] = useState<number>(0);
   useEffect(() => {
     axios.get("http://localhost:3001/").then((res) => {
       setQuizData(res.data);
+      setRandomNum(Math.floor(Math.random() * res.data.length));
     });
   }, []);
 
   // random number that under the length of the quiz data
-  const randomNum = Math.floor(Math.random() * quizData.length);
   if (quizData[randomNum]) {
     console.log(quizData[randomNum].question);
   }
