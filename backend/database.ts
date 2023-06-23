@@ -1,13 +1,14 @@
 const mysql = require("mysql");
+require("dotenv").config();
 
 const connection = mysql.createConnection({
-  host: "127.0.0.1",
-  user: "root",
-  password: "lucas9436",
-  database: "spanish_learning",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
 });
 
-connection.connect(function (err: {stack: string}) {
+connection.connect(function (err: { stack: string }) {
   if (err) {
     console.error("error connecting: " + err.stack);
     return;
