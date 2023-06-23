@@ -6,8 +6,7 @@ const useChatGpt = (prompt: string) => {
 
   useEffect(() => {
     if (prompt) {
-      const api_key = "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";
-
+      const api_key = process.env.NEXT_PUBLIC_API_KEY;
       axios
         .post(
           "https://api.openai.com/v1/chat/completions",
@@ -25,7 +24,7 @@ const useChatGpt = (prompt: string) => {
                           `,
               },
             ],
-            max_tokens: 100,
+            max_tokens: 60,
           },
           {
             headers: {
