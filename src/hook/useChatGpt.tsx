@@ -23,13 +23,6 @@ const useChatGpt = (prompt: string) => {
                           * ${prompt}가 들어갈 공간은 빈칸으로 비워서 문제를 푸는 사람이 맞추도록 함.
                 
                           `,
-                // Give me a Spanish question that contains the word ${prompt}.
-                // However, the question must meet the following conditions:
-                // * The question must be a Spanish sentence containing ${prompt}.
-                // * The sentence must be at level A2.
-                // * The sentence must have an Korean interpretation at the bottom.
-                // * The space for the ${prompt} must be left blank so that the solver has to guess it.
-                // * Provide a maximum of 60 characters.
               },
             ],
             max_tokens: 60,
