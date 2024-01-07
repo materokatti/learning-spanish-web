@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import axios from "axios";
 
-const useChatGpt = (prompt: string) => {
+const useAiPrompt = (prompt: string) => {
   const [translation, setTranslation] = useState("");
 
   useEffect(() => {
@@ -47,4 +47,4 @@ const useChatGpt = (prompt: string) => {
   return translation;
 };
 
-export default useChatGpt;
+export default useAiPrompt;
