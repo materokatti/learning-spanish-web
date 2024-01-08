@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import useChatGpt from "@/hook/useChatGpt";
+import useAiPrompt from "@/hook/useAiPrompt";
 
 export default function Quiz() {
   // get the quiz data from the api
@@ -17,7 +17,7 @@ export default function Quiz() {
   if (quizData[randomNum]) {
     console.log(quizData[randomNum].question);
   }
-  const translation = useChatGpt(quizData[randomNum]?.question);
+  const translation = useAiPrompt(quizData[randomNum]?.question);
   console.log(translation);
   return (
     <div>

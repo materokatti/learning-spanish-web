@@ -6,33 +6,21 @@ const useAiPrompt = (prompt: string) => {
 
   useEffect(() => {
     if (prompt) {
-      // "Llama 2" API 엔드포인트 및 인증 정보
-      const apiEndpoint = "LLAMA_2_API_ENDPOINT";
-      // const apiKey = process.env.NEXT_PUBLIC_LLAMA_API_KEY;
-
-      axios
-        .post(
-          apiEndpoint,
-          {
-            // "Llama 2"에 필요한 요청 본문 구성
-            model: "llama2",
-            prompt: `${prompt}라는 단어가 들어간 스페인어 문제를 내 줘...`,
-            // 기타 "Llama 2"에 필요한 매개변수 추가
-          },
-          {
-            headers: {
-              // Authorization: `Bearer ${apiKey}`,
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((response) => {
-          // "Llama 2" 응답 구조에 맞게 데이터 처리
-          console.log(response.data); // 응답 로깅
-          setTranslation(response.data);
+      fetch("http://localhost:3001/llama-query", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // 여기서 data는 /llama-query 엔드포인트로부터의 응답입니다.
+          console.log(data);
+          setTranslation(data); // 이 부분은 "Llama 2" 응답 구조에 맞게 조정해야 할 수도 있습니다.
         })
         .catch((error) => {
-          console.error(error);
+          console.error("Error:", error);
         });
     }
   }, [prompt]);
