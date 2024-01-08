@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const useAiPrompt = (prompt: string) => {
@@ -6,40 +6,33 @@ const useAiPrompt = (prompt: string) => {
 
   useEffect(() => {
     if (prompt) {
-      const api_key = process.env.NEXT_PUBLIC_API_KEY;
+      // "Llama 2" API 엔드포인트 및 인증 정보
+      const apiEndpoint = "LLAMA_2_API_ENDPOINT";
+      // const apiKey = process.env.NEXT_PUBLIC_LLAMA_API_KEY;
+
       axios
         .post(
-          "https://api.openai.com/v1/chat/completions",
+          apiEndpoint,
           {
-            model: "gpt-3.5-turbo",
-            messages: [
-              {
-                role: "user",
-                content: `${prompt}라는 단어가 들어간 스페인어 문제를 내 줘.
-                          단, 다음 조건에 맞게 문제를 내 줘
-                          * ${prompt}가 들어간 스페인어 문장이어야 함.
-                          * 레벨이 B2 수준으로 문장이 나와야 해.
-                          * 문장 하단에는 한국어 해석이 들어가야 함.
-                          * ${prompt}가 들어갈 공간은 빈칸으로 비워서 문제를 푸는 사람이 맞추도록 함.
-                
-                          `,
-              },
-            ],
-            max_tokens: 60,
+            // "Llama 2"에 필요한 요청 본문 구성
+            model: "llama2",
+            prompt: `${prompt}라는 단어가 들어간 스페인어 문제를 내 줘...`,
+            // 기타 "Llama 2"에 필요한 매개변수 추가
           },
           {
             headers: {
-              Authorization: `Bearer ${api_key}`,
+              // Authorization: `Bearer ${apiKey}`,
               "Content-Type": "application/json",
             },
           }
         )
         .then((response) => {
-          console.log(response.data.choices[0].message);
-          setTranslation(response.data.choices[0].message.content);
+          // "Llama 2" 응답 구조에 맞게 데이터 처리
+          console.log(response.data); // 응답 로깅
+          setTranslation(response.data);
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         });
     }
   }, [prompt]);
